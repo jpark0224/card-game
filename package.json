@@ -1,0 +1,28 @@
+{
+  "name": "card-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "deck.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpark0224/card-game.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jpark0224/card-game/issues"
+  },
+  "homepage": "https://github.com/jpark0224/card-game#readme",
+  "devDependencies": {
+    "@babel/preset-env": "^7.20.2",
+    "jest": "^29.3.1"
+  },
+  "dependencies": {
+    "babel-jest": "^29.3.1",
+    "ts-jest": "^29.0.3"
+  }
+}

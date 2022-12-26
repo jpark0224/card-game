@@ -15,13 +15,18 @@ const VALUES = [
   "K",
 ];
 
-export default class Deck {
+class Deck {
   constructor(cards = freshDeck()) {
     this.cards = cards;
   }
 
   get numberOfCards() {
     return this.cards.length;
+  }
+
+  // take one card from the top
+  pop() {
+    return this.cards.shift();
   }
 
   shuffle() {
@@ -63,3 +68,5 @@ function freshDeck() {
     });
   });
 }
+
+export default Deck;
