@@ -1,0 +1,63 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  font-family: "Tinos", serif;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 10rem);
+  gap: 5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-one-slot,
+.card-two-slot {
+  height: 15rem;
+}
+
+.card {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 0.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 8rem;
+}
+
+.card.red {
+  color: red;
+}
+
+.card.black {
+  color: black;
+}
+
+.card::before,
+.card::after {
+  position: absolute;
+  content: attr(data-value);
+  font-size: 2rem;
+}
+
+.card::before {
+  top: 1rem;
+  left: 1rem;
+}
+
+.card::after {
+  bottom: 1rem;
+  right: 1rem;
+  transform: rotate(180deg);
+}
