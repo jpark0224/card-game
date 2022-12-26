@@ -1,8 +1,9 @@
 import Deck from "./deck.js";
 
-const cardOneSlot = document.querySelector(".card-one-slot");
-const cardTwoSlot = document.querySelector(".card-two-slot");
+const cardContainer = document.querySelector(".card-container");
 const deckElement = document.querySelector(".player-deck");
+let deck;
+let numOfCardsInHand = 0;
 
 const CARD_VALUE_MAP = {
   // later change A for player to choose between 1 and 11
@@ -21,34 +22,43 @@ const CARD_VALUE_MAP = {
   K: 10,
 };
 
-startGame();
 function startGame() {
-  const deck = new Deck();
+  deck = new Deck();
   deck.shuffle();
+  console.log(deck.cards);
+
+  cardContainer.appendChild(deck.cards[0].getHTML());
+  cardContainer.appendChild(deck.cards[1].getHTML());
+  numOfCardsInHand = 2;
+  console.log(countValues());
 }
 
-const deck = new Deck();
-deck.shuffle();
-console.log(deck.cards);
+// count total values of cards dealt so far (not taking Ace into consideration)
+function countValues() {
+  let valueSum = 0;
+  for (let i = 0; i < numOfCardsInHand; i++) {
+    valueSum += CARD_VALUE_MAP[deck.cards[i].value];
+  }
+  return valueSum;
+}
 
-cardOneSlot.appendChild(deck.cards[0].getHTML());
-cardTwoSlot.appendChild(deck.cards[1].getHTML());
-
-// function bust(
-//   cardOne,
-//   cardTwo,
-//   cardThree,
-//   cardFour,
-//   cardFive,
-//   cardSix,
-//   cardSeven,
-//   cardEight,
-//   cardNine,
-//   cardTen,
-//   cardEleven
-// ) {
-//   return;
-// }
+function hit() {
+  numOfCardsInHand++;
+  // append card
+  cardContainer.appendChild(deck.cards[numOfCardsInHand - 1].getHTML());
+  if (countValues() > 21) {
+    console.log("bust");
+  }
+  console.log(countValues());
+}
 
 // maximum number of cards a player can hold
 // 11, four aces, four 2s and three 3s.
+
+// event listners
+const startBtn = document.querySelector(".start");
+startBtn.addEventListener("click", startGame);
+const hitBtn = document.querySelector(".hit");
+hitBtn.addEventListener("click", hit);
+// const standBtn = document.querySelector(".stand");
+// standBtn.addEventListener("click", stand);
