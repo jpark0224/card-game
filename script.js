@@ -23,6 +23,7 @@ const CARD_VALUE_MAP = {
 };
 
 function startGame() {
+  cardContainer.replaceChildren();
   deck = new Deck();
   deck.shuffle();
   console.log(deck.cards);
@@ -38,27 +39,39 @@ function countValues() {
   let valueSum = 0;
   for (let i = 0; i < numOfCardsInHand; i++) {
     valueSum += CARD_VALUE_MAP[deck.cards[i].value];
+    // handle ace
+    // Count aces as 1
+    // If the hand contains an ace and the total is currently <= 11, add 10.
+    // for the first two dealt cards, ace is always 11.
+    if (deck.cards[i].value === "A" && valueSum <= 11) {
+      valueSum += 10;
+    }
   }
   return valueSum;
 }
 
 function hit() {
   numOfCardsInHand++;
-  // append card
   cardContainer.appendChild(deck.cards[numOfCardsInHand - 1].getHTML());
+
   if (countValues() > 21) {
+    cardContainer.replaceChildren();
     console.log("bust");
   }
+  console.log(countValues());
+}
+
+function stand() {
   console.log(countValues());
 }
 
 // maximum number of cards a player can hold
 // 11, four aces, four 2s and three 3s.
 
-// event listners
+// event listeners
 const startBtn = document.querySelector(".start");
 startBtn.addEventListener("click", startGame);
 const hitBtn = document.querySelector(".hit");
 hitBtn.addEventListener("click", hit);
-// const standBtn = document.querySelector(".stand");
-// standBtn.addEventListener("click", stand);
+const standBtn = document.querySelector(".stand");
+standBtn.addEventListener("click", stand);
