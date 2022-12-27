@@ -15,7 +15,7 @@ const VALUES = [
   "K",
 ];
 
-class Deck {
+export default class Deck {
   constructor(cards = freshDeck()) {
     this.cards = cards;
   }
@@ -29,6 +29,10 @@ class Deck {
     return this.cards.shift();
   }
 
+  dealCard(card) {
+    this.cards.push(card);
+  }
+
   shuffle() {
     for (let i = this.numberOfCards - 1; i > 0; i--) {
       // get the random index before the current card
@@ -40,6 +44,8 @@ class Deck {
     }
   }
 }
+
+export class Hand extends Deck {}
 
 class Card {
   constructor(suit, value) {
@@ -68,5 +74,3 @@ function freshDeck() {
     });
   });
 }
-
-export default Deck;

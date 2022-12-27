@@ -1,4 +1,4 @@
-import Deck from "../deck";
+import Deck from "../script/deck";
 
 describe("deck", () => {
   const deck = new Deck();
