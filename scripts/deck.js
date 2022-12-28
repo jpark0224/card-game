@@ -24,11 +24,6 @@ class Deck {
     return this.cards.length;
   }
 
-  // take one card from the top
-  pop() {
-    return this.cards.shift();
-  }
-
   shuffle() {
     for (let i = this.numberOfCards - 1; i > 0; i--) {
       // get the random index before the current card
@@ -80,4 +75,4 @@ function freshDeck() {
   });
 }
 
-export { Deck, Hand };
+export { Deck, Hand, Card };

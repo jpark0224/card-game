@@ -36,11 +36,11 @@ function startGame() {
     cardContainer.appendChild(card.getHTML());
   }
 
-  console.log(evaluate());
+  console.log(evaluate(hand));
 }
 
 // count total values of cards dealt so far (not taking Ace into consideration)
-function evaluate() {
+function evaluate(hand) {
   try {
     let valueSum = 0;
     for (let i = 0; i < hand.numberOfCards; i++) {
@@ -63,8 +63,8 @@ function evaluate() {
 
 function hit() {
   try {
-    if (hand.cards !== undefined) {
-      if (evaluate() === 0) {
+    if (hand.cards) {
+      if (evaluate(hand) === 0) {
         throw "You can't hit when busted";
       }
 
@@ -77,14 +77,14 @@ function hit() {
       cardContainer.appendChild(newCard.getHTML());
 
       // bust
-      if (evaluate() > 21) {
+      if (evaluate(hand) > 21) {
         cardContainer.replaceChildren();
         hand.cards = [];
         console.log("bust");
       }
 
       // evaluate
-      console.log(evaluate());
+      console.log(evaluate(hand));
     }
   } catch (e) {
     if (e instanceof TypeError) {
@@ -97,11 +97,11 @@ function hit() {
 
 function stand() {
   try {
-    if (hand.cards !== undefined) {
-      if (evaluate() === 0) {
+    if (hand.cards) {
+      if (evaluate(hand) === 0) {
         console.log("You can't stand when busted");
       } else {
-        console.log(evaluate());
+        console.log(evaluate(hand));
       }
     }
   } catch (e) {
@@ -115,10 +115,16 @@ function stand() {
 
 // event listeners
 const startBtn = document.querySelector(".start");
-startBtn.addEventListener("click", startGame);
+if (startBtn) {
+  startBtn.addEventListener("click", startGame);
+}
 const hitBtn = document.querySelector(".hit");
-hitBtn.addEventListener("click", hit);
+if (hitBtn) {
+  hitBtn.addEventListener("click", hit);
+}
 const standBtn = document.querySelector(".stand");
-standBtn.addEventListener("click", stand);
+if (standBtn) {
+  standBtn.addEventListener("click", stand);
+}
 
-// module.exports = { startGame, evaluate, hit, stand };
+export { startGame, evaluate, hit, stand };

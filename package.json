@@ -15,7 +15,8 @@
     "collectCoverage": true,
     "coverageReporters": [
       "html"
-    ]
+    ],
+    "testEnvironment": "jsdom"
   },
   "repository": {
     "type": "git",
@@ -30,7 +31,8 @@
   "homepage": "https://github.com/jpark0224/card-game#readme",
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
-    "jest": "^29.3.1"
+    "jest": "^29.3.1",
+    "jest-environment-jsdom": "^29.3.1"
   },
   "dependencies": {
     "babel-jest": "^29.3.1",
