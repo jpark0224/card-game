@@ -15,7 +15,7 @@ const VALUES = [
   "K",
 ];
 
-export default class Deck {
+class Deck {
   constructor(cards = freshDeck()) {
     this.cards = cards;
   }
@@ -27,10 +27,6 @@ export default class Deck {
   // take one card from the top
   pop() {
     return this.cards.shift();
-  }
-
-  dealCard(card) {
-    this.cards.push(card);
   }
 
   shuffle() {
@@ -45,7 +41,11 @@ export default class Deck {
   }
 }
 
-export class Hand extends Deck {}
+class Hand extends Deck {
+  drawCard(card) {
+    this.cards.push(card);
+  }
+}
 
 class Card {
   constructor(suit, value) {
@@ -74,3 +74,5 @@ function freshDeck() {
     });
   });
 }
+
+export { Deck, Hand };

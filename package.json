@@ -6,6 +6,17 @@
   "scripts": {
     "test": "jest"
   },
+  "jest": {
+    "preset": "ts-jest",
+    "transform": {
+      "^.+\\.(ts|tsx)?$": "ts-jest",
+      "^.+\\.(js|jsx)$": "babel-jest"
+    },
+    "collectCoverage": true,
+    "coverageReporters": [
+      "html"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jpark0224/card-game.git"
