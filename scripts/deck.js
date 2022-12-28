@@ -42,7 +42,12 @@ class Deck {
 }
 
 class Hand extends Deck {
-  drawCard(card) {
+  constructor(cards = []) {
+    super(cards);
+    this.cards = cards;
+  }
+
+  draw(card) {
     this.cards.push(card);
   }
 }

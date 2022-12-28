@@ -41,10 +41,6 @@ function startGame() {
 
 // count total values of cards dealt so far (not taking Ace into consideration)
 function evaluate() {
-  if (hand === undefined) {
-    throw "Start game";
-  }
-
   try {
     let valueSum = 0;
     for (let i = 0; i < hand.numberOfCards; i++) {
@@ -59,38 +55,62 @@ function evaluate() {
     }
     return valueSum;
   } catch (e) {
-    console.log(e);
+    if (e instanceof TypeError) {
+      console.log("Start game to evaluate cards");
+    }
   }
 }
 
 function hit() {
-  if (evaluate() === 0) {
-    throw "You can't hit when busted";
-  }
-
   try {
-    let newCard = deck.cards[hand.numberOfCards - 1];
+    if (hand.cards !== undefined) {
+      if (evaluate() === 0) {
+        throw "You can't hit when busted";
+      }
 
-    // draw card
-    hand.drawCard(newCard);
+      let newCard = deck.cards[hand.numberOfCards - 1];
 
-    // apply HTML to the new card
-    cardContainer.appendChild(newCard.getHTML());
+      // draw card
+      hand.draw(newCard);
 
-    // bust
-    if (evaluate() > 21) {
-      cardContainer.replaceChildren();
-      hand.cards = [];
-      console.log("bust");
+      // apply HTML to the new card
+      cardContainer.appendChild(newCard.getHTML());
+
+      // bust
+      if (evaluate() > 21) {
+        cardContainer.replaceChildren();
+        hand.cards = [];
+        console.log("bust");
+      }
+
+      // evaluate
+      console.log(evaluate());
     }
-    console.log(evaluate());
   } catch (e) {
-    console.log(e);
+    if (e instanceof TypeError) {
+      console.log("Start game to hit");
+    } else {
+      console.log(e);
+    }
   }
 }
 
 function stand() {
-  console.log(evaluate());
+  try {
+    if (hand.cards !== undefined) {
+      if (evaluate() === 0) {
+        console.log("You can't stand when busted");
+      } else {
+        console.log(evaluate());
+      }
+    }
+  } catch (e) {
+    if (e instanceof TypeError) {
+      console.log("Start game to stand");
+    } else {
+      console.log(e);
+    }
+  }
 }
 
 // event listeners
