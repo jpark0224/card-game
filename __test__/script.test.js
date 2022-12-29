@@ -19,7 +19,7 @@ describe("Evaluate", () => {
     { suit: "♥", value: "7", expected: 7 },
     { suit: "♠", value: "7", expected: 7 },
   ])(
-    "The suit of the card should not affect value. $value should be evaluated as 7 when suit is $suit",
+    "The suit of the card should not affect value. $value should be evaluated as $expected when suit is $suit",
     ({ suit, value, expected }) => {
       const card = new Card(suit, value);
       const hand = new Hand([card]);
@@ -37,7 +37,7 @@ describe("Evaluate", () => {
     { suit: "♦", value: "8", expected: 8 },
     { suit: "♦", value: "9", expected: 9 },
     { suit: "♦", value: "10", expected: 10 },
-  ])("$value should be worth $value", ({ suit, value, expected }) => {
+  ])("$value should be worth $expected", ({ suit, value, expected }) => {
     const card = new Card(suit, value);
     const hand = new Hand([card]);
     expect(evaluate(hand)).toBe(expected);
@@ -47,7 +47,7 @@ describe("Evaluate", () => {
     { suit: "♣", value: "J", expected: 10 },
     { suit: "♣", value: "Q", expected: 10 },
     { suit: "♣", value: "K", expected: 10 },
-  ])("$value should be worth 10.", ({ suit, value, expected }) => {
+  ])("$value should be worth $expected.", ({ suit, value, expected }) => {
     const card = new Card(suit, value);
     const hand = new Hand([card]);
     expect(evaluate(hand)).toBe(expected);
