@@ -12,10 +12,17 @@ describe("Deck", () => {
   });
 
   test("A deck can be shuffled", () => {
-    const oldDeckCard = deck.cards[34];
-    deck.shuffle();
-    const shuffledDeckCard = deck.cards[34];
-    expect(oldDeckCard).not.toEqual(shuffledDeckCard);
+    let originalDeck = deck;
+    let clonedDeck = structuredClone(originalDeck);
+    originalDeck.shuffle();
+
+    function compareDecks(originalDeck, clonedDeck) {
+      for (let i = 0; i < originalDeck.numberOfCards; i++) {
+        return originalDeck.cards[i] === clonedDeck.cards[i];
+      }
+    }
+
+    expect(compareDecks(originalDeck, clonedDeck)).toBeFalsy();
   });
 });
 
