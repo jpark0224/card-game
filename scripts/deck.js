@@ -42,6 +42,10 @@ class Hand extends Deck {
     this.cards = cards;
   }
 
+  // setOpeningHand(cards) {
+  //   this.cards = cards;
+  // }
+
   draw(card) {
     this.cards.push(card);
   }

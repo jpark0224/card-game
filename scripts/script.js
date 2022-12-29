@@ -1,6 +1,10 @@
 import { Deck, Hand } from "./deck.js";
 
 const cardContainer = document.querySelector(".card-container");
+const score = document.querySelector(".score");
+const errorMessage = document.querySelector(".error-message");
+const bustMessage = document.querySelector(".bust");
+
 let deck, hand;
 
 const CARD_VALUE_MAP = {
@@ -20,23 +24,41 @@ const CARD_VALUE_MAP = {
 };
 
 function startGame() {
+  // erase bust message if there was one
+  bustMessage.innerHTML = "";
+
   // make a new deck
-  cardContainer.replaceChildren();
-  deck = new Deck();
-  deck.shuffle();
+
+  getNewDeck();
+
+  function getNewDeck() {
+    cardContainer.replaceChildren();
+    deck = new Deck();
+    deck.shuffle();
+  }
 
   // deal opening hand
-  const openingHand = [deck.cards[0], deck.cards[1]];
-  hand = new Hand(openingHand);
+
+  dealOpeningHand();
+
+  function dealOpeningHand() {
+    const openingHand = [deck.cards[0], deck.cards[1]];
+    hand = new Hand(openingHand);
+  }
 
   console.log(hand.cards);
 
   // apply HTML to cards in hand
-  for (let card of hand.cards) {
-    cardContainer.appendChild(card.getHTML());
+
+  applyHTML();
+
+  function applyHTML() {
+    for (let card of hand.cards) {
+      cardContainer.appendChild(card.getHTML());
+    }
   }
 
-  console.log(evaluate(hand));
+  score.innerHTML = evaluate(hand);
 }
 
 // count total values of cards dealt so far (not taking Ace into consideration)
@@ -56,7 +78,7 @@ function evaluate(hand) {
     return valueSum;
   } catch (e) {
     if (e instanceof TypeError) {
-      console.log("Start game to evaluate cards");
+      disappearingMessage(errorMessage, "Start game to evaluate cards");
     }
   }
 }
@@ -77,20 +99,27 @@ function hit() {
       cardContainer.appendChild(newCard.getHTML());
 
       // bust
-      if (evaluate(hand) > 21) {
-        cardContainer.replaceChildren();
-        hand.cards = [];
-        console.log("bust");
+      bust();
+
+      function bust() {
+        if (evaluate(hand) > 21) {
+          disappearingMessage(score, evaluate(hand));
+          cardContainer.replaceChildren();
+          hand.cards = [];
+          disappearingMessage(bustMessage, "bust");
+        }
       }
 
-      // evaluate
-      console.log(evaluate(hand));
+      // evaluate when not bust
+      if (evaluate(hand) !== 0) {
+        score.innerHTML = evaluate(hand);
+      }
     }
   } catch (e) {
     if (e instanceof TypeError) {
-      console.log("Start game to hit");
+      disappearingMessage(errorMessage, "Start game to hit");
     } else {
-      console.log(e);
+      disappearingMessage(errorMessage, e);
     }
   }
 }
@@ -99,18 +128,25 @@ function stand() {
   try {
     if (hand.cards) {
       if (evaluate(hand) === 0) {
-        console.log("You can't stand when busted");
+        disappearingMessage(errorMessage, "You can't stand when busted");
       } else {
-        console.log(evaluate(hand));
+        score.innerHTML = evaluate(hand);
       }
     }
   } catch (e) {
     if (e instanceof TypeError) {
-      console.log("Start game to stand");
+      disappearingMessage(errorMessage, "Start game to stand");
     } else {
-      console.log(e);
+      disappearingMessage(errorMessage, e);
     }
   }
+}
+
+function disappearingMessage(element, message) {
+  element.innerHTML = message;
+  setTimeout(() => {
+    element.innerHTML = "";
+  }, 1000);
 }
 
 // event listeners

@@ -4,7 +4,7 @@
   "description": "",
   "main": "deck.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest -- --verbose"
   },
   "jest": {
     "preset": "ts-jest",
@@ -16,7 +16,10 @@
     "coverageReporters": [
       "html"
     ],
-    "testEnvironment": "jsdom"
+    "testEnvironment": "jsdom",
+    "setupFiles": [
+      "<rootDir>/jest/setup.js"
+    ]
   },
   "repository": {
     "type": "git",
