@@ -2,7 +2,6 @@ import { Deck, Hand } from "./deck.js";
 
 const cardContainer = document.querySelector(".card-container");
 const score = document.querySelector(".score");
-const errorMessage = document.querySelector(".error-message");
 const bustMessage = document.querySelector(".bust");
 
 let deck, hand;
@@ -26,6 +25,14 @@ const CARD_VALUE_MAP = {
 function startGame() {
   // erase bust message if there was one
   bustMessage.innerHTML = "";
+
+  showButtons();
+  function showButtons() {
+    hitBtn.style.visibility = "visible";
+    standBtn.style.visibility = "visible";
+    startBtn.style.display = "none";
+    resetBtn.style.display = "inline";
+  }
 
   // make a new deck
 
@@ -77,19 +84,13 @@ function evaluate(hand) {
     }
     return valueSum;
   } catch (e) {
-    if (e instanceof TypeError) {
-      disappearingMessage(errorMessage, "Start game to evaluate cards");
-    }
+    console.log(e);
   }
 }
 
 function hit() {
   try {
     if (hand.cards) {
-      if (evaluate(hand) === 0) {
-        throw "You can't hit when busted";
-      }
-
       let newCard = deck.cards[hand.numberOfCards - 1];
 
       // draw card
@@ -106,7 +107,10 @@ function hit() {
           disappearingMessage(score, evaluate(hand));
           cardContainer.replaceChildren();
           hand.cards = [];
+
           disappearingMessage(bustMessage, "bust");
+
+          hideButtons();
         }
       }
 
@@ -116,29 +120,17 @@ function hit() {
       }
     }
   } catch (e) {
-    if (e instanceof TypeError) {
-      disappearingMessage(errorMessage, "Start game to hit");
-    } else {
-      disappearingMessage(errorMessage, e);
-    }
+    console.log(e);
   }
 }
 
 function stand() {
   try {
     if (hand.cards) {
-      if (evaluate(hand) === 0) {
-        disappearingMessage(errorMessage, "You can't stand when busted");
-      } else {
-        score.innerHTML = evaluate(hand);
-      }
+      score.innerHTML = evaluate(hand);
     }
   } catch (e) {
-    if (e instanceof TypeError) {
-      disappearingMessage(errorMessage, "Start game to stand");
-    } else {
-      disappearingMessage(errorMessage, e);
-    }
+    console.log(e);
   }
 }
 
@@ -147,6 +139,13 @@ function disappearingMessage(element, message) {
   setTimeout(() => {
     element.innerHTML = "";
   }, 1000);
+}
+
+function hideButtons() {
+  hitBtn.style.visibility = "hidden";
+  standBtn.style.visibility = "hidden";
+  startBtn.style.display = "inline";
+  resetBtn.style.display = "none";
 }
 
 // event listeners
@@ -161,6 +160,16 @@ if (hitBtn) {
 const standBtn = document.querySelector(".stand");
 if (standBtn) {
   standBtn.addEventListener("click", stand);
+}
+const resetBtn = document.querySelector(".reset");
+if (resetBtn) {
+  resetBtn.addEventListener("click", () => {
+    cardContainer.replaceChildren();
+    score.innerHTML = "";
+    bustMessage.innerHTML = "";
+    hand.cards = [];
+    hideButtons();
+  });
 }
 
 export { startGame, evaluate, hit, stand };
