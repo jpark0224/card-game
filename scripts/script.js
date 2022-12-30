@@ -137,7 +137,9 @@ function stand() {
 function disappearingMessage(element, message) {
   element.innerHTML = message;
   setTimeout(() => {
-    element.innerHTML = "";
+    if (element.innerHTML === message || evaluate(hand) === 0) {
+      element.innerHTML = "";
+    }
   }, 1000);
 }
 
