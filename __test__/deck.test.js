@@ -16,13 +16,9 @@ describe("Deck", () => {
     let clonedDeck = structuredClone(originalDeck);
     originalDeck.shuffle();
 
-    function compareDecks(originalDeck, clonedDeck) {
-      for (let i = 0; i < originalDeck.numberOfCards; i++) {
-        return originalDeck.cards[i] === clonedDeck.cards[i];
-      }
+    for (let i = 0; i < originalDeck.numberOfCards; i++) {
+      expect(originalDeck.cards[i]).not.toBe(clonedDeck.cards[i]);
     }
-
-    expect(compareDecks(originalDeck, clonedDeck)).toBeFalsy();
   });
 });
 
@@ -38,16 +34,19 @@ describe("Hand", () => {
   });
 
   test("A drawn card can be added to hand", () => {
-    const nineCard = new Card("♣", "9");
-    hand.draw(nineCard);
-    expect(hand.cards[hand.numberOfCards - 1]).toBe(nineCard);
+    let deck = new Deck();
+    for (let i = 0; i < deck.numberOfCards; i++) {
+      hand.draw(deck.cards[i]);
+      expect(deck.cards[i]).toBe(hand.cards[i]);
+    }
   });
 });
 
 describe("Card", () => {
   test("A card object with suit and value can be created", () => {
     const card = new Card("♥", "A");
-    expect(card).toEqual({ suit: "♥", value: "A" });
+    expect(card.suit).toBe("♥");
+    expect(card.value).toBe("A");
   });
 
   test.each([
@@ -61,8 +60,14 @@ describe("Card", () => {
   });
 
   test("A card element should have classes of card and its color", () => {
-    const card = new Card("♦", "2");
-    const cardElement = card.getHTML();
-    expect(cardElement.className).toEqual("card red");
+    const cardArray = [
+      new Card("♦", "2"),
+      new Card("♣", "2"),
+      new Card("♥", "2"),
+      new Card("♠", "2"),
+    ];
+    for (const card of cardArray) {
+      expect(card.getHTML().className).toBe(`card ${card.color}`);
+    }
   });
 });
