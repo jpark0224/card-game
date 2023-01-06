@@ -6,6 +6,22 @@ const bustMessage = document.querySelector(".bust");
 
 let deck, hand;
 
+const CARD_VALUE_MAP = {
+  A: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
+  6: 6,
+  7: 7,
+  8: 8,
+  9: 9,
+  10: 10,
+  J: 10,
+  Q: 10,
+  K: 10,
+};
+
 function startGame() {
   // erase bust message if there was one
   bustMessage.innerHTML = "";
@@ -49,7 +65,27 @@ function startGame() {
     }
   }
 
-  score.innerHTML = hand.evaluate();
+  score.innerHTML = evaluate(hand);
+}
+
+// count total values of cards dealt so far (not taking Ace into consideration)
+function evaluate(hand) {
+  try {
+    let valueSum = 0;
+    for (let i = 0; i < hand.numberOfCards; i++) {
+      valueSum += CARD_VALUE_MAP[hand.cards[i].value];
+      // handle ace
+      // Count aces as 1
+      // If the hand contains an ace and the total is currently <= 11, add 10.
+      // for the first two dealt cards, ace is always 11.
+      if (hand.cards[i].value === "A" && valueSum <= 11) {
+        valueSum += 10;
+      }
+    }
+    return valueSum;
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 function hit() {
@@ -67,8 +103,8 @@ function hit() {
       bust();
 
       function bust() {
-        if (hand.evaluate() > 21) {
-          disappearingMessage(score, hand.evaluate());
+        if (evaluate(hand) > 21) {
+          disappearingMessage(score, evaluate(hand));
           cardContainer.replaceChildren();
           hand.cards = [];
 
@@ -79,8 +115,8 @@ function hit() {
       }
 
       // evaluate when not bust
-      if (hand.evaluate() !== 0) {
-        score.innerHTML = hand.evaluate();
+      if (evaluate(hand) !== 0) {
+        score.innerHTML = evaluate(hand);
       }
     }
   } catch (e) {
@@ -91,7 +127,7 @@ function hit() {
 function stand() {
   try {
     if (hand.cards) {
-      score.innerHTML = hand.evaluate();
+      score.innerHTML = evaluate(hand);
     }
   } catch (e) {
     console.log(e);
@@ -101,7 +137,7 @@ function stand() {
 function disappearingMessage(element, message) {
   element.innerHTML = message;
   setTimeout(() => {
-    if (element.innerHTML === message || hand.evaluate() === 0) {
+    if (element.innerHTML === message || evaluate(hand) === 0) {
       element.innerHTML = "";
     }
   }, 1000);
@@ -138,4 +174,4 @@ if (resetBtn) {
   });
 }
 
-export { startGame, hit, stand };
+export { startGame, evaluate, hit, stand };

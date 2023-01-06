@@ -14,21 +14,6 @@ const VALUES = [
   "Q",
   "K",
 ];
-const CARD_VALUE_MAP = {
-  A: 1,
-  2: 2,
-  3: 3,
-  4: 4,
-  5: 5,
-  6: 6,
-  7: 7,
-  8: 8,
-  9: 9,
-  10: 10,
-  J: 10,
-  Q: 10,
-  K: 10,
-};
 
 class Deck {
   constructor(cards = freshDeck()) {
@@ -62,21 +47,6 @@ class Hand {
 
   draw(card) {
     this.cards.push(card);
-  }
-
-  evaluate() {
-    try {
-      let valueSum = 0;
-      for (let i = 0; i < this.numberOfCards; i++) {
-        valueSum += CARD_VALUE_MAP[this.cards[i].value];
-        if (this.cards[i].value === "A" && valueSum <= 11) {
-          valueSum += 10;
-        }
-      }
-      return valueSum;
-    } catch (e) {
-      console.log(e);
-    }
   }
 }
 
