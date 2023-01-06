@@ -24,4 +24,11 @@ $ npm install http-server -g
 $ http-server
 ```
 
-Go to your browser and type localhost:8080. Your Application should run there.
+Then go to your browser and type localhost:8080. Your Application should run there.
+
+## Assumptions
+1. A player going bust means that they are lost.
+2. A single deck of cards has four suites: hearts, clubs, spades, diamonds. Each suite has thirteen cards: ace, 2, 3, 4, 5, 6, 7, 8, 9, 10, jack, queen and king.
+3. A valid hand of cards does not go over 21 points.
+4. A player chooses a value of ace based on their best interest. 
+5. An integration test or end to end test is not necessary.
