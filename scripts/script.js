@@ -38,6 +38,7 @@ function startGame() {
   valueSum = 0;
 
   showButtons();
+
   function showButtons() {
     hitBtn.style.visibility = "visible";
     standBtn.style.visibility = "visible";
@@ -100,59 +101,51 @@ function startGame() {
 }
 
 function hit() {
-  try {
-    if (hand.cards) {
-      let newCard = deck.cards[hand.numberOfCards - 1];
+  if (hand.cards) {
+    let newCard = deck.cards[hand.numberOfCards - 1];
 
-      // draw card
-      hand.draw(newCard);
+    // draw card
+    hand.draw(newCard);
 
-      // apply HTML to the new card
-      cardContainer.appendChild(newCard.getHTML());
+    // apply HTML to the new card
+    cardContainer.appendChild(newCard.getHTML());
 
-      evaluate();
+    evaluate();
 
-      function evaluate() {
-        valueSum += CARD_VALUE_MAP[newCard.value];
+    function evaluate() {
+      valueSum += CARD_VALUE_MAP[newCard.value];
 
-        if (newCard.value === "A") {
-          if (valueSum <= 11) {
-            handleModal(oneAceModal, oneBtn, elevenBtn);
-          }
+      if (newCard.value === "A") {
+        if (valueSum <= 11) {
+          handleModal(oneAceModal, oneBtn, elevenBtn);
         }
-      }
-
-      // bust
-      bust();
-
-      function bust() {
-        if (valueSum > 21) {
-          score.innerHTML = valueSum;
-
-          bustMessage.innerHTML = "bust";
-
-          hideButtons();
-          startBtn.innerHTML = "Play again";
-        }
-      }
-
-      // evaluate when not bust
-      if (valueSum !== 0) {
-        score.innerHTML = valueSum;
       }
     }
-  } catch (e) {
-    console.log(e);
+
+    // bust
+    bust();
+
+    function bust() {
+      if (valueSum > 21) {
+        score.innerHTML = valueSum;
+
+        bustMessage.innerHTML = "bust";
+
+        hideButtons();
+        startBtn.innerHTML = "Play again";
+      }
+    }
+
+    // evaluate when not bust
+    if (valueSum !== 0) {
+      score.innerHTML = valueSum;
+    }
   }
 }
 
 function stand() {
-  try {
-    if (hand.cards) {
-      score.innerHTML = valueSum;
-    }
-  } catch (e) {
-    console.log(e);
+  if (hand.cards) {
+    score.innerHTML = valueSum;
   }
 }
 

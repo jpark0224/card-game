@@ -40,6 +40,19 @@ describe("Hand", () => {
       expect(deck.cards[i]).toBe(hand.cards[i]);
     }
   });
+
+  test("The number of aces in hand should be counted correctly", () => {
+    const aceCard = new Card("♣", "A");
+    const kingCard = new Card("♦", "K");
+    const queenCard = new Card("♣", "Q");
+    const nineCard = new Card("♥", "9");
+    const hand = new Hand([kingCard, queenCard, nineCard]);
+
+    for (let i = 1; i <= 4; i++) {
+      hand.cards.push(aceCard);
+      expect(hand.getNumberOfAces()).toBe(i);
+    }
+  });
 });
 
 describe("Card", () => {
