@@ -48,6 +48,10 @@ class Hand {
   draw(card) {
     this.cards.push(card);
   }
+
+  // trackAce() {
+  //   this.aceInHand = true;
+  // }
 }
 
 class Card {

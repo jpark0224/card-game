@@ -3,8 +3,17 @@ import { Deck, Hand } from "./deck.js";
 const cardContainer = document.querySelector(".card-container");
 const score = document.querySelector(".score");
 const bustMessage = document.querySelector(".bust");
+const modal = document.querySelector(".modal");
+const doubleAcesModal = document.querySelector(".double-aces-modal");
+const oneBtn = document.querySelector(".one");
+const elevenBtn = document.querySelector(".eleven");
+const oneAndOneBtn = document.querySelector(".one-and-one");
+const oneAndElevenBtn = document.querySelector(".one-and-eleven");
 
 let deck, hand;
+
+let valueSum = 0;
+let numOfAce = 0;
 
 const CARD_VALUE_MAP = {
   A: 1,
@@ -25,6 +34,10 @@ const CARD_VALUE_MAP = {
 function startGame() {
   // erase bust message if there was one
   bustMessage.innerHTML = "";
+
+  // reset valueSum and numOfAce
+  valueSum = 0;
+  numOfAce = 0;
 
   showButtons();
   function showButtons() {
@@ -65,26 +78,47 @@ function startGame() {
     }
   }
 
-  score.innerHTML = evaluate(hand);
+  // score.innerHTML = evaluateOpeningHand(hand);
+  evaluateOpeningHand();
+  score.innerHTML = valueSum;
 }
 
-// count total values of cards dealt so far (not taking Ace into consideration)
-function evaluate(hand) {
-  try {
-    let valueSum = 0;
-    for (let i = 0; i < hand.numberOfCards; i++) {
-      valueSum += CARD_VALUE_MAP[hand.cards[i].value];
-      // handle ace
-      // Count aces as 1
-      // If the hand contains an ace and the total is currently <= 11, add 10.
-      // for the first two dealt cards, ace is always 11.
-      if (hand.cards[i].value === "A" && valueSum <= 11) {
-        valueSum += 10;
-      }
+function evaluateOpeningHand() {
+  for (let i = 0; i < hand.numberOfCards; i++) {
+    valueSum += CARD_VALUE_MAP[hand.cards[i].value];
+    if (hand.cards[i].value === "A") {
+      numOfAce++;
     }
-    return valueSum;
-  } catch (e) {
-    console.log(e);
+  }
+
+  // two aces -> 2 (1 + 1) or 12 (1 + 11)
+  if (numOfAce === 2) {
+    doubleAcesModal.style.display = "block";
+    oneAndOneBtn.onclick = function () {
+      modal.style.display = "none";
+    };
+    oneAndElevenBtn.onclick = function () {
+      valueSum += 10;
+      score.innerHTML = valueSum;
+      modal.style.display = "none";
+    };
+  } else if (numOfAce === 1) {
+    // 1 ace and J, Q, K -> automatic win
+    if (valueSum === 11) {
+      valueSum += 10;
+    }
+    // 1 ace and number cards -> 1 or 11
+    else {
+      modal.style.display = "block";
+      oneBtn.onclick = function () {
+        modal.style.display = "none";
+      };
+      elevenBtn.onclick = function () {
+        valueSum += 10;
+        score.innerHTML = valueSum;
+        modal.style.display = "none";
+      };
+    }
   }
 }
 
@@ -99,12 +133,33 @@ function hit() {
       // apply HTML to the new card
       cardContainer.appendChild(newCard.getHTML());
 
+      evaluate();
+
+      function evaluate() {
+        valueSum += CARD_VALUE_MAP[newCard.value];
+
+        if (newCard.value === "A") {
+          numOfAce++;
+          if (valueSum <= 11) {
+            modal.style.display = "block";
+            oneBtn.onclick = function () {
+              modal.style.display = "none";
+            };
+            elevenBtn.onclick = function () {
+              valueSum += 10;
+              score.innerHTML = valueSum;
+              modal.style.display = "none";
+            };
+          }
+        }
+      }
+
       // bust
       bust();
 
       function bust() {
-        if (evaluate(hand) > 21) {
-          disappearingMessage(score, evaluate(hand));
+        if (valueSum > 21) {
+          disappearingMessage(score, valueSum);
           cardContainer.replaceChildren();
           hand.cards = [];
 
@@ -115,8 +170,8 @@ function hit() {
       }
 
       // evaluate when not bust
-      if (evaluate(hand) !== 0) {
-        score.innerHTML = evaluate(hand);
+      if (valueSum !== 0) {
+        score.innerHTML = valueSum;
       }
     }
   } catch (e) {
@@ -127,7 +182,7 @@ function hit() {
 function stand() {
   try {
     if (hand.cards) {
-      score.innerHTML = evaluate(hand);
+      score.innerHTML = valueSum;
     }
   } catch (e) {
     console.log(e);
@@ -137,7 +192,7 @@ function stand() {
 function disappearingMessage(element, message) {
   element.innerHTML = message;
   setTimeout(() => {
-    if (element.innerHTML === message || evaluate(hand) === 0) {
+    if (element.innerHTML === message || valueSum === 0) {
       element.innerHTML = "";
     }
   }, 1000);
@@ -149,6 +204,16 @@ function hideButtons() {
   startBtn.style.display = "inline";
   resetBtn.style.display = "none";
 }
+
+function openModal() {
+  modal.style.display = "block";
+}
+
+// window.onclick = function (event) {
+//   if (event.target == modal) {
+//     modal.style.display = "none";
+//   }
+// };
 
 // event listeners
 const startBtn = document.querySelector(".start");
@@ -171,7 +236,9 @@ if (resetBtn) {
     bustMessage.innerHTML = "";
     hand.cards = [];
     hideButtons();
+    valueSum = 0;
+    numOfAce = 0;
   });
 }
 
-export { startGame, evaluate, hit, stand };
+export { startGame, hit, stand };
