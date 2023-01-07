@@ -59,7 +59,7 @@ body {
 }
 
 /* The Modal (background) */
-.modal,
+.one-ace-modal,
 .double-aces-modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */

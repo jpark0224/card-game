@@ -3,7 +3,7 @@ import { Deck, Hand } from "./deck.js";
 const cardContainer = document.querySelector(".card-container");
 const score = document.querySelector(".score");
 const bustMessage = document.querySelector(".bust");
-const modal = document.querySelector(".modal");
+const oneAceModal = document.querySelector(".one-ace-modal");
 const doubleAcesModal = document.querySelector(".double-aces-modal");
 const oneBtn = document.querySelector(".one");
 const elevenBtn = document.querySelector(".eleven");
@@ -83,15 +83,7 @@ function startGame() {
 
     // two aces -> 2 (1 + 1) or 12 (1 + 11)
     if (hand.getNumberOfAces() === 2) {
-      doubleAcesModal.style.display = "block";
-      oneAndOneBtn.onclick = function () {
-        modal.style.display = "none";
-      };
-      oneAndElevenBtn.onclick = function () {
-        valueSum += 10;
-        score.innerHTML = valueSum;
-        modal.style.display = "none";
-      };
+      handleModal(doubleAcesModal, oneAndOneBtn, oneAndElevenBtn);
     } else if (hand.getNumberOfAces() === 1) {
       // 1 ace and J, Q, K -> automatic win
       if (valueSum === 11) {
@@ -99,15 +91,7 @@ function startGame() {
       }
       // 1 ace and number cards -> 1 or 11
       else {
-        modal.style.display = "block";
-        oneBtn.onclick = function () {
-          modal.style.display = "none";
-        };
-        elevenBtn.onclick = function () {
-          valueSum += 10;
-          score.innerHTML = valueSum;
-          modal.style.display = "none";
-        };
+        handleModal(oneAceModal, oneBtn, elevenBtn);
       }
     }
   }
@@ -133,15 +117,7 @@ function hit() {
 
         if (newCard.value === "A") {
           if (valueSum <= 11) {
-            modal.style.display = "block";
-            oneBtn.onclick = function () {
-              modal.style.display = "none";
-            };
-            elevenBtn.onclick = function () {
-              valueSum += 10;
-              score.innerHTML = valueSum;
-              modal.style.display = "none";
-            };
+            handleModal(oneAceModal, oneBtn, elevenBtn);
           }
         }
       }
@@ -185,6 +161,18 @@ function hideButtons() {
   standBtn.style.visibility = "hidden";
   startBtn.style.display = "inline";
   resetBtn.style.display = "none";
+}
+
+function handleModal(modal, buttonOne, buttonTwo) {
+  modal.style.display = "block";
+  buttonOne.onclick = function () {
+    modal.style.display = "none";
+  };
+  buttonTwo.onclick = function () {
+    valueSum += 10;
+    score.innerHTML = valueSum;
+    modal.style.display = "none";
+  };
 }
 
 // event listeners
