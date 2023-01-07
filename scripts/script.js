@@ -13,7 +13,6 @@ const oneAndElevenBtn = document.querySelector(".one-and-eleven");
 let deck, hand;
 
 let valueSum = 0;
-let numOfAce = 0;
 
 const CARD_VALUE_MAP = {
   A: 1,
@@ -35,9 +34,8 @@ function startGame() {
   // erase bust message if there was one
   bustMessage.innerHTML = "";
 
-  // reset valueSum and numOfAce
+  // reset valueSum
   valueSum = 0;
-  numOfAce = 0;
 
   showButtons();
   function showButtons() {
@@ -66,8 +64,6 @@ function startGame() {
     hand = new Hand(openingHand);
   }
 
-  console.log(hand.cards);
-
   // apply HTML to cards in hand
 
   applyHTML();
@@ -78,48 +74,45 @@ function startGame() {
     }
   }
 
-  // score.innerHTML = evaluateOpeningHand(hand);
   evaluateOpeningHand();
-  score.innerHTML = valueSum;
-}
 
-function evaluateOpeningHand() {
-  for (let i = 0; i < hand.numberOfCards; i++) {
-    valueSum += CARD_VALUE_MAP[hand.cards[i].value];
-    if (hand.cards[i].value === "A") {
-      numOfAce++;
+  function evaluateOpeningHand() {
+    for (let i = 0; i < hand.numberOfCards; i++) {
+      valueSum += CARD_VALUE_MAP[hand.cards[i].value];
     }
-  }
 
-  // two aces -> 2 (1 + 1) or 12 (1 + 11)
-  if (numOfAce === 2) {
-    doubleAcesModal.style.display = "block";
-    oneAndOneBtn.onclick = function () {
-      modal.style.display = "none";
-    };
-    oneAndElevenBtn.onclick = function () {
-      valueSum += 10;
-      score.innerHTML = valueSum;
-      modal.style.display = "none";
-    };
-  } else if (numOfAce === 1) {
-    // 1 ace and J, Q, K -> automatic win
-    if (valueSum === 11) {
-      valueSum += 10;
-    }
-    // 1 ace and number cards -> 1 or 11
-    else {
-      modal.style.display = "block";
-      oneBtn.onclick = function () {
+    // two aces -> 2 (1 + 1) or 12 (1 + 11)
+    if (hand.getNumberOfAces() === 2) {
+      doubleAcesModal.style.display = "block";
+      oneAndOneBtn.onclick = function () {
         modal.style.display = "none";
       };
-      elevenBtn.onclick = function () {
+      oneAndElevenBtn.onclick = function () {
         valueSum += 10;
         score.innerHTML = valueSum;
         modal.style.display = "none";
       };
+    } else if (hand.getNumberOfAces() === 1) {
+      // 1 ace and J, Q, K -> automatic win
+      if (valueSum === 11) {
+        valueSum += 10;
+      }
+      // 1 ace and number cards -> 1 or 11
+      else {
+        modal.style.display = "block";
+        oneBtn.onclick = function () {
+          modal.style.display = "none";
+        };
+        elevenBtn.onclick = function () {
+          valueSum += 10;
+          score.innerHTML = valueSum;
+          modal.style.display = "none";
+        };
+      }
     }
   }
+
+  score.innerHTML = valueSum;
 }
 
 function hit() {
@@ -139,7 +132,6 @@ function hit() {
         valueSum += CARD_VALUE_MAP[newCard.value];
 
         if (newCard.value === "A") {
-          numOfAce++;
           if (valueSum <= 11) {
             modal.style.display = "block";
             oneBtn.onclick = function () {
@@ -159,13 +151,12 @@ function hit() {
 
       function bust() {
         if (valueSum > 21) {
-          disappearingMessage(score, valueSum);
-          cardContainer.replaceChildren();
-          hand.cards = [];
+          score.innerHTML = valueSum;
 
-          disappearingMessage(bustMessage, "bust");
+          bustMessage.innerHTML = "bust";
 
           hideButtons();
+          startBtn.innerHTML = "Play again";
         }
       }
 
@@ -189,31 +180,12 @@ function stand() {
   }
 }
 
-function disappearingMessage(element, message) {
-  element.innerHTML = message;
-  setTimeout(() => {
-    if (element.innerHTML === message || valueSum === 0) {
-      element.innerHTML = "";
-    }
-  }, 1000);
-}
-
 function hideButtons() {
   hitBtn.style.visibility = "hidden";
   standBtn.style.visibility = "hidden";
   startBtn.style.display = "inline";
   resetBtn.style.display = "none";
 }
-
-function openModal() {
-  modal.style.display = "block";
-}
-
-// window.onclick = function (event) {
-//   if (event.target == modal) {
-//     modal.style.display = "none";
-//   }
-// };
 
 // event listeners
 const startBtn = document.querySelector(".start");
@@ -237,7 +209,7 @@ if (resetBtn) {
     hand.cards = [];
     hideButtons();
     valueSum = 0;
-    numOfAce = 0;
+    startBtn.innerHTML = "Start";
   });
 }
 

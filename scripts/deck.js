@@ -49,9 +49,15 @@ class Hand {
     this.cards.push(card);
   }
 
-  // trackAce() {
-  //   this.aceInHand = true;
-  // }
+  getNumberOfAces() {
+    let count = 0;
+    for (const card of this.cards) {
+      if (card.value === "A") {
+        count++;
+      }
+    }
+    return count;
+  }
 }
 
 class Card {
