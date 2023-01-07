@@ -61,8 +61,9 @@ function startGame() {
   dealOpeningHand();
 
   function dealOpeningHand() {
+    hand = new Hand();
     const openingHand = [deck.cards[0], deck.cards[1]];
-    hand = new Hand(openingHand);
+    hand.receiveCards(openingHand);
   }
 
   // apply HTML to cards in hand
@@ -104,8 +105,8 @@ function hit() {
   if (hand.cards) {
     let newCard = deck.cards[hand.numberOfCards - 1];
 
-    // draw card
-    hand.draw(newCard);
+    // receive card
+    hand.receiveCards(newCard);
 
     // apply HTML to the new card
     cardContainer.appendChild(newCard.getHTML());

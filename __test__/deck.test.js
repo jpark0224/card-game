@@ -23,30 +23,39 @@ describe("Deck", () => {
 });
 
 describe("Hand", () => {
-  let hand;
-
-  beforeEach(() => {
-    hand = new Hand();
-  });
-
   test("The number of cards in one hand before dealing cards should be 0", () => {
+    const hand = new Hand();
+
     expect(hand.numberOfCards).toBe(0);
   });
 
-  test("A drawn card can be added to hand", () => {
-    let deck = new Deck();
+  test("Two cards can be added to hand", () => {
+    const deck = new Deck();
+    const hand = new Hand();
+    const openingHand = [deck.cards[0], deck.cards[1]];
+    hand.receiveCards(openingHand);
+
+    expect(openingHand).toEqual(hand.cards);
+  });
+
+  test("A card can be added to hand", () => {
+    const deck = new Deck();
+    const hand = new Hand();
+
     for (let i = 0; i < deck.numberOfCards; i++) {
-      hand.draw(deck.cards[i]);
+      hand.receiveCards(deck.cards[i]);
       expect(deck.cards[i]).toBe(hand.cards[i]);
     }
   });
 
   test("The number of aces in hand should be counted correctly", () => {
     const aceCard = new Card("♣", "A");
-    const kingCard = new Card("♦", "K");
-    const queenCard = new Card("♣", "Q");
-    const nineCard = new Card("♥", "9");
-    const hand = new Hand([kingCard, queenCard, nineCard]);
+    const cardArray = [
+      new Card("♦", "K"),
+      new Card("♣", "Q"),
+      new Card("♥", "9"),
+    ];
+    const hand = new Hand([cardArray]);
 
     for (let i = 1; i <= 4; i++) {
       hand.cards.push(aceCard);

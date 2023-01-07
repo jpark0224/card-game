@@ -45,8 +45,12 @@ class Hand {
     return this.cards.length;
   }
 
-  draw(card) {
-    this.cards.push(card);
+  receiveCards(card) {
+    if (card.length > 1) {
+      this.cards.push(...card);
+    } else {
+      this.cards.push(card);
+    }
   }
 
   getNumberOfAces() {
