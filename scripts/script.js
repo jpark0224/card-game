@@ -88,15 +88,27 @@ function startGame() {
   }
 
   function applyDealerHTML(hand, container) {
-    container.appendChild(hand.cards[0].getSpaceHolderHTML());
-    container.appendChild(hand.cards[1].getSpaceHolderHTML());
+    container.appendChild(getSpaceHolderHTML());
+    container.appendChild(getSpaceHolderHTML());
     setTimeout(function () {
       container.replaceChildren();
-      container.appendChild(hand.cards[0].getBackHTML());
+      container.appendChild(getBackHTML());
     }, 1000);
     setTimeout(function () {
       container.appendChild(hand.cards[1].getFrontHTML());
     }, 1500);
+
+    function getBackHTML() {
+      const cardDiv = document.createElement("div");
+      cardDiv.classList.add("back-of-card");
+      return cardDiv;
+    }
+
+    function getSpaceHolderHTML() {
+      const cardDiv = document.createElement("div");
+      cardDiv.classList.add("space-holder");
+      return cardDiv;
+    }
   }
 
   function evaluateOpeningHand(hand) {
@@ -132,7 +144,7 @@ function startGame() {
   playerScore.innerHTML = playerValueSum;
 
   if (playerValueSum === 21) {
-    handleMessageModal("Blackjack!");
+    setTimeout(handleMessageModal, 1000, "Blackjack!");
   }
 }
 
@@ -186,7 +198,7 @@ function hit() {
 
         playerScore.innerHTML = playerValueSum;
 
-        handleMessageModal("You busted. Dealer won!");
+        setTimeout(handleMessageModal, 1000, "You busted. Dealer won!");
 
         hideButtons();
 
