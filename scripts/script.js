@@ -156,8 +156,10 @@ function hit() {
       playerValueSum += CARD_VALUE_MAP[newCard.value];
 
       if (newCard.value === "A") {
-        if (playerValueSum <= 11) {
+        if (playerValueSum < 11) {
           handleAceModal(singleAceModal, oneBtn, elevenBtn);
+        } else if (playerValueSum === 11) {
+          playerValueSum += 10;
         }
       }
 
