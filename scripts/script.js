@@ -4,9 +4,11 @@ const playerCardContainer = document.querySelector(".player-card-container");
 const dealerCardContainer = document.querySelector(".dealer-card-container");
 const playerScore = document.querySelector(".player-score");
 const dealerScore = document.querySelector(".dealer-score");
-const bustMessage = document.querySelector(".bust");
-const oneAceModal = document.querySelector(".one-ace-modal");
-const doubleAcesModal = document.querySelector(".double-aces-modal");
+const oneAceModal = document.querySelector("#single-ace-modal");
+const doubleAcesModal = document.querySelector("#double-aces-modal");
+const messageModal = document.querySelector("#message-modal");
+const modalMessage = document.querySelector(".modal-message");
+const close = document.querySelector(".close");
 const oneBtn = document.querySelector(".one");
 const elevenBtn = document.querySelector(".eleven");
 const oneAndOneBtn = document.querySelector(".one-and-one");
@@ -35,12 +37,6 @@ const CARD_VALUE_MAP = {
 };
 
 function startGame() {
-  // erase bust message if there was one
-  // bustMessage.innerHTML = "";
-
-  // reset valueSum
-  // playerValueSum = 0;
-
   reset();
 
   showButtons();
@@ -69,8 +65,6 @@ function startGame() {
 
   function dealOpeningHand(hand, cards) {
     hand.receiveCards(cards);
-
-    console.log(hand.cards);
   }
 
   // apply HTML to cards in hand
@@ -97,7 +91,7 @@ function startGame() {
 
     // two aces -> 2 (1 + 1) or 12 (1 + 11)
     if (hand.getNumberOfAces() === 2) {
-      handleModal(doubleAcesModal, oneAndOneBtn, oneAndElevenBtn);
+      handleAceModal(doubleAcesModal, oneAndOneBtn, oneAndElevenBtn);
     } else if (hand.getNumberOfAces() === 1) {
       // 1 ace and J, Q, K -> automatic win
       if (valueSum === 11) {
@@ -105,7 +99,7 @@ function startGame() {
       }
       // 1 ace and number cards -> 1 or 11
       else {
-        handleModal(oneAceModal, oneBtn, elevenBtn);
+        handleAceModal(oneAceModal, oneBtn, elevenBtn);
       }
     }
     return valueSum;
@@ -148,7 +142,7 @@ function hit() {
 
       if (newCard.value === "A") {
         if (playerValueSum <= 11) {
-          handleModal(oneAceModal, oneBtn, elevenBtn);
+          handleAceModal(oneAceModal, oneBtn, elevenBtn);
         }
       }
     }
@@ -160,7 +154,7 @@ function hit() {
       if (playerValueSum > 21) {
         playerScore.innerHTML = playerValueSum;
 
-        bustMessage.innerHTML = "bust";
+        handleMessageModal("You busted!");
 
         hideButtons();
         startBtn.innerHTML = "Play again";
@@ -212,14 +206,14 @@ function compareScores() {
 
   if (dealerScore.innerHTML > playerScore.innerHTML) {
     if (dealerScore.innerHTML > 21) {
-      console.log("Dealer busted. You won!");
+      handleMessageModal("Dealer busted. You won!");
     } else {
-      console.log("You lost!");
+      handleMessageModal("You lost!");
     }
   } else if (dealerScore.innerHTML === playerScore.innerHTML) {
-    console.log("It's a tie!");
+    handleMessageModal("It's a tie!");
   } else if (dealerScore.innerHTML < playerScore.innerHTML) {
-    console.log("You won!");
+    handleMessageModal("You won!");
   }
 }
 
@@ -230,7 +224,7 @@ function hideButtons() {
   resetBtn.style.display = "none";
 }
 
-function handleModal(modal, buttonOne, buttonTwo) {
+function handleAceModal(modal, buttonOne, buttonTwo) {
   modal.style.display = "block";
   buttonOne.onclick = function () {
     modal.style.display = "none";
@@ -242,12 +236,24 @@ function handleModal(modal, buttonOne, buttonTwo) {
   };
 }
 
+function handleMessageModal(message) {
+  modalMessage.innerHTML = message;
+  messageModal.style.display = "block";
+  close.onclick = function () {
+    messageModal.style.display = "none";
+  };
+  window.onclick = function (event) {
+    if (event.target == messageModal) {
+      messageModal.style.display = "none";
+    }
+  };
+}
+
 function reset() {
   playerCardContainer.replaceChildren();
   dealerCardContainer.replaceChildren();
   playerScore.innerHTML = "";
   dealerScore.innerHTML = "";
-  bustMessage.innerHTML = "";
   playerHand.cards = [];
   dealerHand.cards = [];
   hideButtons();

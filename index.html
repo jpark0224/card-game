@@ -21,9 +21,7 @@
     <button class="hit button" style="display: none">Hit</button>
     <button class="stand button" style="display: none">Stand</button>
 
-    <!-- The Modal -->
-    <div class="one-ace-modal">
-      <!-- Modal content -->
+    <div class="modal" id="single-ace-modal">
       <div class="modal-content">
         <p>You have an ace.</p>
         <p></p>
@@ -33,8 +31,7 @@
       </div>
     </div>
 
-    <div class="double-aces-modal">
-      <!-- Modal content -->
+    <div class="modal" id="double-aces-modal">
       <div class="modal-content">
         <p>You have two aces.</p>
         <p></p>
@@ -43,6 +40,13 @@
         <p>(11 and 11 is not an option because you will be bust.)</p>
         <button class="one-and-one button">1 and 1</button>
         <button class="one-and-eleven button">1 and 11</button>
+      </div>
+    </div>
+
+    <div class="modal" id="message-modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p class="modal-message"></p>
       </div>
     </div>
 
