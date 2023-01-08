@@ -78,17 +78,25 @@ function startGame() {
   // apply HTML to cards in hand
 
   applyPlayerHTML(playerHand, playerCardContainer);
-  applyDealerHTML();
+  applyDealerHTML(dealerHand, dealerCardContainer);
 
   function applyPlayerHTML(hand, container) {
-    for (let card of hand.cards) {
-      container.appendChild(card.getFrontHTML());
-    }
+    container.appendChild(hand.cards[0].getFrontHTML());
+    setTimeout(function () {
+      container.appendChild(hand.cards[1].getFrontHTML());
+    }, 500);
   }
 
-  function applyDealerHTML() {
-    dealerCardContainer.appendChild(dealerHand.cards[0].getBackHTML());
-    dealerCardContainer.appendChild(dealerHand.cards[1].getFrontHTML());
+  function applyDealerHTML(hand, container) {
+    container.appendChild(hand.cards[0].getSpaceHolderHTML());
+    container.appendChild(hand.cards[1].getSpaceHolderHTML());
+    setTimeout(function () {
+      container.replaceChildren();
+      container.appendChild(hand.cards[0].getBackHTML());
+    }, 1000);
+    setTimeout(function () {
+      container.appendChild(hand.cards[1].getFrontHTML());
+    }, 1500);
   }
 
   function evaluateOpeningHand(hand) {
@@ -213,7 +221,10 @@ function dealerHit() {
     dealerHand.receiveCards(newCard);
 
     // apply HTML to the new card
-    dealerCardContainer.appendChild(newCard.getFrontHTML());
+    // dealerCardContainer.appendChild(newCard.getFrontHTML());
+    setTimeout(function () {
+      dealerCardContainer.appendChild(newCard.getFrontHTML());
+    }, 500);
 
     dealerScore.innerHTML = evaluateDealer(dealerHand);
 

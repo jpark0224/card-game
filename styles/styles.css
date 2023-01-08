@@ -49,11 +49,11 @@ body {
   align-items: center;
   font-size: 6rem;
   background-color: white;
-  animation-name: example;
-  animation-duration: 0.8s;
+  animation-name: fly;
+  animation-duration: 0.5s;
 }
 
-@keyframes example {
+@keyframes fly {
   0% {
     top: -50vh;
   }
@@ -74,8 +74,22 @@ body {
   align-items: center;
   background-image: url(../images/back-of-card.jpg);
   background-size: cover;
-  animation-name: example;
-  animation-duration: 0.8s;
+  animation-name: fly;
+  animation-duration: 0.5s;
+}
+
+.space-holder {
+  position: relative;
+  height: 12rem;
+  width: 8.5rem;
+  border: 1px solid black;
+  border-radius: 0.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url(../images/back-of-card.jpg);
+  background-size: cover;
+  visibility: hidden;
 }
 
 .card.red {

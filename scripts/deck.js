@@ -87,6 +87,12 @@ class Card {
     cardDiv.classList.add("back-of-card");
     return cardDiv;
   }
+
+  getSpaceHolderHTML() {
+    const cardDiv = document.createElement("div");
+    cardDiv.classList.add("space-holder");
+    return cardDiv;
+  }
 }
 
 function freshDeck() {

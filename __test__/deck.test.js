@@ -89,7 +89,7 @@ describe("Card", () => {
       new Card("♠", "2"),
     ];
     for (const card of cardArray) {
-      expect(card.getHTML().className).toBe(`card ${card.color}`);
+      expect(card.getFrontHTML().className).toBe(`card ${card.color}`);
     }
   });
 });
