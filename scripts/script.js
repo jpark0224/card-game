@@ -1,4 +1,4 @@
-import { Deck, Hand } from "./deck.js";
+import { Card, Deck, Hand } from "./deck.js";
 
 const cardContainer = document.querySelector("#card-container");
 const playerCardContainer = document.querySelector("#player-card-container");
@@ -228,14 +228,14 @@ function compareScores() {
 
   if (dealerScoreNum > playerScoreNum) {
     if (dealerScoreNum > 21) {
-      handleMessageModal("Dealer busted. You won!");
+      setTimeout(handleMessageModal, 1000, "Dealer busted. You won!");
     } else {
-      handleMessageModal("You lost. Maybe next time!");
+      setTimeout(handleMessageModal, 1000, "You lost. Maybe next time!");
     }
   } else if (dealerScoreNum === playerScoreNum) {
-    handleMessageModal("It's a tie!");
+    setTimeout(handleMessageModal, 1000, "It's a tie!");
   } else if (dealerScoreNum < playerScoreNum) {
-    handleMessageModal("You won!");
+    setTimeout(handleMessageModal, 1000, "You won!");
   }
 }
 

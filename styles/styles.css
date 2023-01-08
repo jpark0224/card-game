@@ -49,6 +49,18 @@ body {
   align-items: center;
   font-size: 6rem;
   background-color: white;
+  animation-name: example;
+  animation-duration: 0.8s;
+}
+
+@keyframes example {
+  0% {
+    top: -50vh;
+  }
+  100% {
+    left: 0px;
+    top: 0px;
+  }
 }
 
 .back-of-card {
@@ -62,6 +74,8 @@ body {
   align-items: center;
   background-image: url(../images/back-of-card.jpg);
   background-size: cover;
+  animation-name: example;
+  animation-duration: 0.8s;
 }
 
 .card.red {
