@@ -149,7 +149,7 @@ button {
 }
 
 button:hover {
-  background-color: #109151;
+  background-color: #faaf36;
   color: #fff;
 }
 
@@ -161,4 +161,50 @@ button:hover {
 #card-container {
   font-size: 1.2rem;
   color: white;
+}
+
+:root {
+  --gold: #ffb338;
+  --light-shadow: #77571d;
+  --dark-shadow: #3e2904;
+}
+
+#title-container {
+  display: grid;
+  grid-template-areas: "overlap";
+  place-content: center;
+  text-transform: uppercase;
+  height: 50vh;
+}
+#title-container > div {
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-size: 10rem;
+  grid-area: overlap;
+  letter-spacing: 1px;
+  -webkit-text-stroke: 4px transparent;
+}
+#title-back {
+  background-image: repeating-linear-gradient(
+    105deg,
+    var(--gold) 0%,
+    var(--dark-shadow) 5%,
+    var(--gold) 12%
+  );
+  color: transparent;
+  filter: drop-shadow(5px 15px 15px black);
+  transform: scaleY(1.05);
+  transform-origin: top;
+}
+#title-front {
+  background-image: repeating-linear-gradient(
+    5deg,
+    var(--gold) 0%,
+    var(--light-shadow) 23%,
+    var(--gold) 31%
+  );
+  color: #a70101;
+  transform: scale(1);
 }

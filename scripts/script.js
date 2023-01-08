@@ -15,6 +15,7 @@ const oneBtn = document.querySelector("#one");
 const elevenBtn = document.querySelector("#eleven");
 const oneAndOneBtn = document.querySelector("#one-and-one");
 const oneAndElevenBtn = document.querySelector("#one-and-eleven");
+const titleContainer = document.querySelector("#title-container");
 
 let deck;
 let playerHand = new Hand();
@@ -50,6 +51,7 @@ function startGame() {
     resetBtn.style.display = "inline";
     gameInfo.style.display = "inline";
     cardContainer.style.display = "block";
+    titleContainer.style.display = "none";
   }
 
   // make a new deck
