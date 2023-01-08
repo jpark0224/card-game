@@ -107,7 +107,13 @@ function startGame() {
 
     // two aces -> 2 (1 + 1) or 12 (1 + 11)
     if (hand.getNumberOfAces() === 2) {
-      handleAceModal(doubleAcesModal, oneAndOneBtn, oneAndElevenBtn);
+      setTimeout(
+        handleAceModal,
+        2000,
+        doubleAcesModal,
+        oneAndOneBtn,
+        oneAndElevenBtn
+      );
     } else if (hand.getNumberOfAces() === 1) {
       // 1 ace and J, Q, K -> automatic win
       if (valueSum === 11) {
@@ -115,7 +121,7 @@ function startGame() {
       }
       // 1 ace and number cards -> 1 or 11
       else {
-        handleAceModal(singleAceModal, oneBtn, elevenBtn);
+        setTimeout(handleAceModal, 2000, singleAceModal, oneBtn, elevenBtn);
       }
     }
     return valueSum;
