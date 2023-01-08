@@ -18,8 +18,8 @@
   <body>
     <button class="start button">Start</button>
     <button class="reset button" style="display: none">Reset</button>
-    <button class="hit button">Hit</button>
-    <button class="stand button">Stand</button>
+    <button class="hit button" style="display: none">Hit</button>
+    <button class="stand button" style="display: none">Stand</button>
 
     <!-- The Modal -->
     <div class="one-ace-modal">
@@ -46,10 +46,15 @@
       </div>
     </div>
 
-    <div class="score"></div>
+    <div class="player-score"></div>
     <div class="bust"></div>
 
-    <div class="card-container"></div>
+    <div class="dealer-score"></div>
+
+    <div class="card-container-container">
+      <div class="player-card-container"></div>
+      <div class="dealer-card-container"></div>
+    </div>
 
     <script src="./scripts/script.js" type="module"></script>
   </body>

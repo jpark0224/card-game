@@ -13,23 +13,48 @@ body {
   font-family: "Tinos", serif;
   justify-content: center;
   align-items: center;
+  background-image: url("../images/background.jpg");
+  background-size: cover;
 }
 
-.cardContainer {
+.card-container-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+}
+
+.player-card-container,
+.dealer-card-container {
+  display: flex;
   justify-content: center;
   align-items: center;
+  gap: 1rem;
 }
 
 .card {
   position: relative;
   height: 12rem;
-  width: 7rem;
+  width: 8.5rem;
   border: 1px solid black;
   border-radius: 0.3rem;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 6rem;
+  background-color: white;
+}
+
+.back-of-card {
+  position: relative;
+  height: 12rem;
+  width: 8.5rem;
+  border: 1px solid black;
+  border-radius: 0.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url(../images/back-of-card.jpg);
+  background-size: cover;
 }
 
 .card.red {

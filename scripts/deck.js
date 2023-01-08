@@ -74,11 +74,17 @@ class Card {
     return this.suit === "♣" || this.suit === "♠" ? "black" : "red";
   }
 
-  getHTML() {
+  getFrontHTML() {
     const cardDiv = document.createElement("div");
     cardDiv.innerText = this.suit;
     cardDiv.classList.add("card", this.color);
     cardDiv.dataset.value = `${this.value} ${this.suit}`;
+    return cardDiv;
+  }
+
+  getBackHTML() {
+    const cardDiv = document.createElement("div");
+    cardDiv.classList.add("back-of-card");
     return cardDiv;
   }
 }
