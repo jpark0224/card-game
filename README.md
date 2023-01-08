@@ -15,7 +15,7 @@
 ## Introduction
 
 A Blackjack card game based on object-oriented programming, test-driven development, and agile methodologies. 
-A kanban board, an agile project management tool, is used to manage the progress as in the screenshot below.
+A kanban board was used to manage the progress as in the screenshot below.
 
 ![Screenshot 2023-01-07 004853](https://user-images.githubusercontent.com/86682774/211225096-2a79ecba-0713-4ff2-b180-60055fa7bb3a.png)
 
