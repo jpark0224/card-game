@@ -1,4 +1,4 @@
-import { Card, Deck, Hand } from "./deck.js";
+import { Deck, Hand } from "./deck.js";
 
 const cardContainer = document.querySelector("#card-container");
 const playerCardContainer = document.querySelector("#player-card-container");
@@ -55,19 +55,14 @@ function startGame() {
   }
 
   // make a new deck
-
   getNewDeck();
 
   function getNewDeck() {
-    playerCardContainer.replaceChildren();
     deck = new Deck();
     deck.shuffle();
   }
 
-  console.log(deck);
-
-  // deal opening hand
-
+  // deal opening hands
   dealOpeningHand(playerHand, [deck.cards[0], deck.cards[1]]);
   dealOpeningHand(dealerHand, [deck.cards[2], deck.cards[3]]);
 
@@ -75,8 +70,7 @@ function startGame() {
     hand.receiveCards(cards);
   }
 
-  // apply HTML to cards in hand
-
+  // apply HTML to cards in hands
   applyPlayerHTML(playerHand, playerCardContainer);
   applyDealerHTML(dealerHand, dealerCardContainer);
 
@@ -88,8 +82,7 @@ function startGame() {
   }
 
   function applyDealerHTML(hand, container) {
-    container.appendChild(getSpaceHolderHTML());
-    container.appendChild(getSpaceHolderHTML());
+    container.append(getPlaceHolderHTML(), getPlaceHolderHTML());
     setTimeout(function () {
       container.replaceChildren();
       container.appendChild(getBackHTML());
@@ -104,12 +97,17 @@ function startGame() {
       return cardDiv;
     }
 
-    function getSpaceHolderHTML() {
+    function getPlaceHolderHTML() {
       const cardDiv = document.createElement("div");
       cardDiv.classList.add("space-holder");
       return cardDiv;
     }
   }
+
+  // evaluate player opening hand and update score
+  playerValueSum += evaluateOpeningHand(playerHand);
+  playerScore.innerHTML = playerValueSum;
+  dealerScore.innerHTML = "?";
 
   function evaluateOpeningHand(hand) {
     let valueSum = 0;
@@ -127,28 +125,128 @@ function startGame() {
         oneAndElevenBtn
       );
     } else if (hand.getNumberOfAces() === 1) {
-      // 1 ace and J, Q, K -> automatic win
+      // 1 ace and 10, J, Q, K -> blackjack
       if (valueSum === 11) {
         valueSum += 10;
+        handleMessageModal("Blackjack!");
       }
-      // 1 ace and number cards -> 1 or 11
+      // 1 ace and number cards from 2 to 9 -> 1 or 11
       else {
         setTimeout(handleAceModal, 2000, singleAceModal, oneBtn, elevenBtn);
       }
     }
     return valueSum;
   }
+}
 
-  playerValueSum += evaluateOpeningHand(playerHand);
+function hit() {
+  if (playerHand.cards && playerValueSum <= 21) {
+    // receive card
+    let newCard =
+      deck.cards[playerHand.numberOfCards + dealerHand.numberOfCards];
+    playerHand.receiveCards(newCard);
 
-  playerScore.innerHTML = playerValueSum;
+    // apply HTML to the new card
+    playerCardContainer.appendChild(newCard.getFrontHTML());
 
-  if (playerValueSum === 21) {
-    setTimeout(handleMessageModal, 1000, "Blackjack!");
+    // evaluate hand
+    evaluateHand();
+
+    function evaluateHand() {
+      playerValueSum += CARD_VALUE_MAP[newCard.value];
+
+      if (newCard.value === "A") {
+        if (playerValueSum <= 11) {
+          handleAceModal(singleAceModal, oneBtn, elevenBtn);
+        }
+      }
+
+      playerScore.innerHTML = playerValueSum;
+    }
+
+    // handle bust
+    handleBust();
+
+    function handleBust() {
+      if (playerValueSum > 21) {
+        // flip a face down card from dealer's opening hand
+        flipDealerCard();
+
+        setTimeout(handleMessageModal, 1000, "You busted. Dealer won!");
+
+        // handle buttons
+        hideButtons();
+        startBtn.innerHTML = "Play again";
+      }
+    }
+  } else {
+    handleMessageModal("You need a valid hand to hit.");
   }
 }
 
-function evaluateDealer(hand) {
+function stand() {
+  if (playerHand.cards && playerValueSum <= 21) {
+    // handle buttons
+    hideButtons();
+    startBtn.innerHTML = "Play again";
+
+    // flip a face down card from dealer's opening hand
+    flipDealerCard();
+
+    // If the dealer has a hand total of 17 or higher, they will automatically stand.
+    // If the dealer has a hand total of 16 or lower, they will take additional hit-cards.
+    dealerHit();
+
+    function dealerHit() {
+      if (dealerScore.innerHTML < 17) {
+        let newCard =
+          deck.cards[playerHand.numberOfCards + dealerHand.numberOfCards];
+
+        // receive card
+        dealerHand.receiveCards(newCard);
+
+        // apply HTML to the new card
+        setTimeout(function () {
+          dealerCardContainer.appendChild(newCard.getFrontHTML());
+        }, 500);
+
+        dealerScore.innerHTML = evaluateDealerHand(dealerHand);
+
+        // repeat until dealer's score is 17 or higher
+        dealerHit();
+      } else return;
+    }
+
+    compareScores();
+
+    function compareScores() {
+      const dealerScoreNum = Number(dealerScore.innerHTML);
+      const playerScoreNum = Number(playerScore.innerHTML);
+
+      if (dealerScoreNum > playerScoreNum) {
+        if (dealerScoreNum > 21) {
+          setTimeout(handleMessageModal, 1000, "Dealer busted. You won!");
+        } else {
+          setTimeout(handleMessageModal, 1000, "You lost. Maybe next time!");
+        }
+      } else if (dealerScoreNum === playerScoreNum) {
+        setTimeout(handleMessageModal, 1000, "It's a tie!");
+      } else if (dealerScoreNum < playerScoreNum) {
+        setTimeout(handleMessageModal, 1000, "You won!");
+      }
+    }
+  } else {
+    handleMessageModal("You need a valid hand to stand.");
+  }
+}
+
+function flipDealerCard() {
+  dealerCardContainer.firstChild.remove();
+  dealerCardContainer.prepend(dealerHand.cards[0].getFrontHTML());
+  dealerScore.innerHTML = evaluateDealerHand(dealerHand);
+}
+
+function evaluateDealerHand(hand) {
   let valueSum = 0;
   for (let i = 0; i < hand.numberOfCards; i++) {
     valueSum += CARD_VALUE_MAP[hand.cards[i].value];
@@ -161,111 +259,6 @@ function evaluateDealer(hand) {
     }
   }
   return valueSum;
-}
-
-function hit() {
-  if (playerHand.cards) {
-    let newCard =
-      deck.cards[playerHand.numberOfCards + dealerHand.numberOfCards];
-
-    // receive card
-    playerHand.receiveCards(newCard);
-
-    // apply HTML to the new card
-    playerCardContainer.appendChild(newCard.getFrontHTML());
-
-    evaluate();
-
-    function evaluate() {
-      playerValueSum += CARD_VALUE_MAP[newCard.value];
-
-      if (newCard.value === "A") {
-        if (playerValueSum <= 11) {
-          handleAceModal(singleAceModal, oneBtn, elevenBtn);
-        }
-      }
-    }
-
-    // bust
-    bust();
-
-    function bust() {
-      if (playerValueSum > 21) {
-        // flip the card of dealer
-        dealerScore.innerHTML = evaluateDealer(dealerHand);
-        dealerCardContainer.firstChild.remove();
-        dealerCardContainer.prepend(dealerHand.cards[0].getFrontHTML());
-
-        playerScore.innerHTML = playerValueSum;
-
-        setTimeout(handleMessageModal, 1000, "You busted. Dealer won!");
-
-        hideButtons();
-
-        startBtn.innerHTML = "Play again";
-      }
-    }
-
-    // evaluate when not bust
-    if (playerValueSum !== 0) {
-      playerScore.innerHTML = playerValueSum;
-    }
-  }
-}
-
-function stand() {
-  // handle buttons
-  hideButtons();
-  startBtn.innerHTML = "Play again";
-
-  // flip the card of dealer
-  dealerCardContainer.firstChild.remove();
-  dealerCardContainer.prepend(dealerHand.cards[0].getFrontHTML());
-  dealerScore.innerHTML = evaluateDealer(dealerHand);
-
-  // If the dealer has a hand total of 17 or higher, they will automatically stand.
-  // If the dealer has a hand total of 16 or lower, they will take additional hit-cards.
-  dealerHit();
-
-  compareScores();
-}
-
-function dealerHit() {
-  if (dealerScore.innerHTML < 17) {
-    let newCard =
-      deck.cards[playerHand.numberOfCards + dealerHand.numberOfCards];
-
-    // receive card
-    dealerHand.receiveCards(newCard);
-
-    // apply HTML to the new card
-    // dealerCardContainer.appendChild(newCard.getFrontHTML());
-    setTimeout(function () {
-      dealerCardContainer.appendChild(newCard.getFrontHTML());
-    }, 500);
-
-    dealerScore.innerHTML = evaluateDealer(dealerHand);
-
-    // repeat until dealer's score is over 17
-    dealerHit();
-  }
-}
-
-function compareScores() {
-  const dealerScoreNum = Number(dealerScore.innerHTML);
-  const playerScoreNum = Number(playerScore.innerHTML);
-
-  if (dealerScoreNum > playerScoreNum) {
-    if (dealerScoreNum > 21) {
-      setTimeout(handleMessageModal, 1000, "Dealer busted. You won!");
-    } else {
-      setTimeout(handleMessageModal, 1000, "You lost. Maybe next time!");
-    }
-  } else if (dealerScoreNum === playerScoreNum) {
-    setTimeout(handleMessageModal, 1000, "It's a tie!");
-  } else if (dealerScoreNum < playerScoreNum) {
-    setTimeout(handleMessageModal, 1000, "You won!");
-  }
 }
 
 function hideButtons() {
@@ -310,6 +303,7 @@ function reset() {
   hideButtons();
   gameInfo.style.display = "none";
   cardContainer.style.display = "none";
+  titleContainer.style.display = "grid";
   playerValueSum = 0;
 }
 
@@ -330,3 +324,5 @@ const resetBtn = document.querySelector("#reset");
 if (resetBtn) {
   resetBtn.addEventListener("click", reset);
 }
+
+export { evaluateDealerHand };
