@@ -1,18 +1,20 @@
 import { Deck, Hand } from "./deck.js";
 
-const playerCardContainer = document.querySelector(".player-card-container");
-const dealerCardContainer = document.querySelector(".dealer-card-container");
-const playerScore = document.querySelector(".player-score");
-const dealerScore = document.querySelector(".dealer-score");
+const cardContainer = document.querySelector("#card-container");
+const playerCardContainer = document.querySelector("#player-card-container");
+const dealerCardContainer = document.querySelector("#dealer-card-container");
+const gameInfo = document.querySelector("#game-info-container");
+const playerScore = document.querySelector("#player-score .score-span");
+const dealerScore = document.querySelector("#dealer-score .score-span");
 const oneAceModal = document.querySelector("#single-ace-modal");
 const doubleAcesModal = document.querySelector("#double-aces-modal");
 const messageModal = document.querySelector("#message-modal");
 const modalMessage = document.querySelector(".modal-message");
 const close = document.querySelector(".close");
-const oneBtn = document.querySelector(".one");
-const elevenBtn = document.querySelector(".eleven");
-const oneAndOneBtn = document.querySelector(".one-and-one");
-const oneAndElevenBtn = document.querySelector(".one-and-eleven");
+const oneBtn = document.querySelector("#one");
+const elevenBtn = document.querySelector("#eleven");
+const oneAndOneBtn = document.querySelector("#one-and-one");
+const oneAndElevenBtn = document.querySelector("#one-and-eleven");
 
 let deck;
 let playerHand = new Hand();
@@ -46,6 +48,8 @@ function startGame() {
     standBtn.style.display = "inline";
     startBtn.style.display = "none";
     resetBtn.style.display = "inline";
+    gameInfo.style.display = "inline";
+    cardContainer.style.display = "block";
   }
 
   // make a new deck
@@ -114,7 +118,7 @@ function startGame() {
   }
 }
 
-function autoEvaluate(hand) {
+function evaluateDealer(hand) {
   let valueSum = 0;
   for (let i = 0; i < hand.numberOfCards; i++) {
     valueSum += CARD_VALUE_MAP[hand.cards[i].value];
@@ -156,11 +160,17 @@ function hit() {
 
     function bust() {
       if (playerValueSum > 21) {
+        // flip the card of dealer
+        dealerScore.innerHTML = evaluateDealer(dealerHand);
+        dealerCardContainer.firstChild.remove();
+        dealerCardContainer.prepend(dealerHand.cards[0].getFrontHTML());
+
         playerScore.innerHTML = playerValueSum;
 
-        handleMessageModal("You busted!");
+        handleMessageModal("You busted. Dealer won!");
 
         hideButtons();
+
         startBtn.innerHTML = "Play again";
       }
     }
@@ -176,7 +186,7 @@ function stand() {
   hideButtons();
 
   // flip the card of dealer
-  dealerScore.innerHTML = autoEvaluate(dealerHand);
+  dealerScore.innerHTML = evaluateDealer(dealerHand);
   dealerCardContainer.firstChild.remove();
   dealerCardContainer.prepend(dealerHand.cards[0].getFrontHTML());
 
@@ -198,7 +208,7 @@ function dealerHit() {
     // apply HTML to the new card
     dealerCardContainer.appendChild(newCard.getFrontHTML());
 
-    dealerScore.innerHTML = autoEvaluate(dealerHand);
+    dealerScore.innerHTML = evaluateDealer(dealerHand);
 
     // repeat until dealer's score is over 17
     dealerHit();
@@ -212,7 +222,7 @@ function compareScores() {
     if (dealerScore.innerHTML > 21) {
       handleMessageModal("Dealer busted. You won!");
     } else {
-      handleMessageModal("You lost!");
+      handleMessageModal("You lost. Maybe next time!");
     }
   } else if (dealerScore.innerHTML === playerScore.innerHTML) {
     handleMessageModal("It's a tie!");
@@ -261,23 +271,25 @@ function reset() {
   playerHand.cards = [];
   dealerHand.cards = [];
   hideButtons();
+  gameInfo.style.display = "none";
+  cardContainer.style.display = "none";
   playerValueSum = 0;
 }
 
 // event listeners
-const startBtn = document.querySelector(".start");
+const startBtn = document.querySelector("#start");
 if (startBtn) {
   startBtn.addEventListener("click", startGame);
 }
-const hitBtn = document.querySelector(".hit");
+const hitBtn = document.querySelector("#hit");
 if (hitBtn) {
   hitBtn.addEventListener("click", hit);
 }
-const standBtn = document.querySelector(".stand");
+const standBtn = document.querySelector("#stand");
 if (standBtn) {
   standBtn.addEventListener("click", stand);
 }
-const resetBtn = document.querySelector(".reset");
+const resetBtn = document.querySelector("#reset");
 if (resetBtn) {
   resetBtn.addEventListener("click", reset);
 }

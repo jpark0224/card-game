@@ -16,18 +16,20 @@
     />
   </head>
   <body>
-    <button class="start button">Start</button>
-    <button class="reset button" style="display: none">Reset</button>
-    <button class="hit button" style="display: none">Hit</button>
-    <button class="stand button" style="display: none">Stand</button>
+    <section id="button-container">
+      <button id="start">Start</button>
+      <button id="reset" style="display: none">Reset</button>
+      <button id="hit" style="display: none">Hit</button>
+      <button id="stand" style="display: none">Stand</button>
+    </section>
 
     <div class="modal" id="single-ace-modal">
       <div class="modal-content">
         <p>You have an ace.</p>
         <p></p>
         <p>What would you like it to be valued as?</p>
-        <button class="one button">1</button>
-        <button class="eleven button">11</button>
+        <button id="one">1</button>
+        <button id="eleven">11</button>
       </div>
     </div>
 
@@ -38,8 +40,8 @@
         <p>What would you like them to be valued as?</p>
         <p></p>
         <p>(11 and 11 is not an option because you will be bust.)</p>
-        <button class="one-and-one button">1 and 1</button>
-        <button class="one-and-eleven button">1 and 11</button>
+        <button id="one-and-one">1 and 1</button>
+        <button id="one-and-eleven">1 and 11</button>
       </div>
     </div>
 
@@ -50,15 +52,21 @@
       </div>
     </div>
 
-    <div class="player-score"></div>
-    <div class="bust"></div>
+    <section id="game-info-container" style="display: none">
+      <div id="player-score">
+        <p>Player Score: <span class="score-span"></span></p>
+      </div>
+      <div id="dealer-score">
+        <p>Dealer Score: <span class="score-span"></span></p>
+      </div>
+    </section>
 
-    <div class="dealer-score"></div>
-
-    <div class="card-container-container">
-      <div class="player-card-container"></div>
-      <div class="dealer-card-container"></div>
-    </div>
+    <section id="card-container" style="display: none">
+      <p>Player Hand</p>
+      <div id="player-card-container"></div>
+      <p>Dealer Hand</p>
+      <div id="dealer-card-container"></div>
+    </section>
 
     <script src="./scripts/script.js" type="module"></script>
   </body>
