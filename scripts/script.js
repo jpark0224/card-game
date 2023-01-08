@@ -6,7 +6,7 @@ const dealerCardContainer = document.querySelector("#dealer-card-container");
 const gameInfo = document.querySelector("#game-info-container");
 const playerScore = document.querySelector("#player-score .score-span");
 const dealerScore = document.querySelector("#dealer-score .score-span");
-const oneAceModal = document.querySelector("#single-ace-modal");
+const singleAceModal = document.querySelector("#single-ace-modal");
 const doubleAcesModal = document.querySelector("#double-aces-modal");
 const messageModal = document.querySelector("#message-modal");
 const modalMessage = document.querySelector(".modal-message");
@@ -107,7 +107,7 @@ function startGame() {
       }
       // 1 ace and number cards -> 1 or 11
       else {
-        handleAceModal(oneAceModal, oneBtn, elevenBtn);
+        handleAceModal(singleAceModal, oneBtn, elevenBtn);
       }
     }
     return valueSum;
@@ -155,7 +155,7 @@ function hit() {
 
       if (newCard.value === "A") {
         if (playerValueSum <= 11) {
-          handleAceModal(oneAceModal, oneBtn, elevenBtn);
+          handleAceModal(singleAceModal, oneBtn, elevenBtn);
         }
       }
     }
@@ -188,12 +188,14 @@ function hit() {
 }
 
 function stand() {
+  // handle buttons
   hideButtons();
+  startBtn.innerHTML = "Play again";
 
   // flip the card of dealer
-  dealerScore.innerHTML = evaluateDealer(dealerHand);
   dealerCardContainer.firstChild.remove();
   dealerCardContainer.prepend(dealerHand.cards[0].getFrontHTML());
+  dealerScore.innerHTML = evaluateDealer(dealerHand);
 
   // If the dealer has a hand total of 17 or higher, they will automatically stand.
   // If the dealer has a hand total of 16 or lower, they will take additional hit-cards.
@@ -221,17 +223,18 @@ function dealerHit() {
 }
 
 function compareScores() {
-  startBtn.innerHTML = "Play again";
+  const dealerScoreNum = Number(dealerScore.innerHTML);
+  const playerScoreNum = Number(playerScore.innerHTML);
 
-  if (dealerScore.innerHTML > playerScore.innerHTML) {
-    if (dealerScore.innerHTML > 21) {
+  if (dealerScoreNum > playerScoreNum) {
+    if (dealerScoreNum > 21) {
       handleMessageModal("Dealer busted. You won!");
     } else {
       handleMessageModal("You lost. Maybe next time!");
     }
-  } else if (dealerScore.innerHTML === playerScore.innerHTML) {
+  } else if (dealerScoreNum === playerScoreNum) {
     handleMessageModal("It's a tie!");
-  } else if (dealerScore.innerHTML < playerScore.innerHTML) {
+  } else if (dealerScoreNum < playerScoreNum) {
     handleMessageModal("You won!");
   }
 }
@@ -262,7 +265,7 @@ function handleMessageModal(message) {
     messageModal.style.display = "none";
   };
   window.onclick = function (event) {
-    if (event.target == messageModal) {
+    if (event.target === messageModal) {
       messageModal.style.display = "none";
     }
   };
