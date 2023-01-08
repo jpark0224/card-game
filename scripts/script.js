@@ -108,6 +108,10 @@ function startGame() {
   playerValueSum += evaluateOpeningHand(playerHand);
 
   playerScore.innerHTML = playerValueSum;
+
+  if (playerValueSum === 21) {
+    handleMessageModal("Blackjack!");
+  }
 }
 
 function autoEvaluate(hand) {
