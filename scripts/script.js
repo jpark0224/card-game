@@ -62,6 +62,8 @@ function startGame() {
     deck.shuffle();
   }
 
+  console.log(deck);
+
   // deal opening hand
 
   dealOpeningHand(playerHand, [deck.cards[0], deck.cards[1]]);
@@ -135,7 +137,8 @@ function evaluateDealer(hand) {
 
 function hit() {
   if (playerHand.cards) {
-    let newCard = deck.cards[playerHand.numberOfCards - 1];
+    let newCard =
+      deck.cards[playerHand.numberOfCards + dealerHand.numberOfCards];
 
     // receive card
     playerHand.receiveCards(newCard);
@@ -200,7 +203,7 @@ function stand() {
 function dealerHit() {
   if (dealerScore.innerHTML < 17) {
     let newCard =
-      deck.cards[playerHand.numberOfCards + dealerHand.numberOfCards - 2];
+      deck.cards[playerHand.numberOfCards + dealerHand.numberOfCards];
 
     // receive card
     dealerHand.receiveCards(newCard);
