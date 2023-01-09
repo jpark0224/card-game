@@ -55,11 +55,11 @@ Then go to your browser and type localhost:8080. Your Application should run the
 1. A single deck of cards has four suites: hearts, clubs, spades, diamonds. Each suite has thirteen cards: ace, 2, 3, 4, 5, 6, 7, 8, 9, 10, jack, queen and king.
 2. A valid hand of cards is at most 21 points.
 3. The player beats the dealer when they have a valid hand of cards in the below scenarios:
-* The player’s score is higher than dealer’s but less than 21.
+* The player’s score is higher than dealer’s but less than or equal to 21.
 * The dealer busted.
 4. When the player scores 21, they can tie with or beat the dealer.
 5. The player loses when they have a valid hand of cards in the below scenarios:
-* The player’s score is lower than dealer’s.
+* The player’s score is lower than dealer's and the dealer's score is less than or equal to 21.
 * The player busted.
 6. The player chooses a value of ace based on their best interest:
 * When the sum of the rest of the card values is 10, an ace is counted as 11. 
