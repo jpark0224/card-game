@@ -58,18 +58,19 @@ Then go to your browser and type localhost:8080. Your Application should run the
 * The player’s score is higher than dealer’s but less than or equal to 21.
 * The dealer busted.
 4. When the player scores 21, they can tie with or beat the dealer.
-5. The player loses when they have a valid hand of cards in the below scenarios:
+5. The player ties with the dealer when their scores are the same. 
+6. The player loses when they have a valid hand of cards in the below scenarios:
 * The player’s score is lower than dealer's and the dealer's score is less than or equal to 21.
 * The player busted.
-6. The player chooses a value of ace based on their best interest:
+7. The player chooses a value of ace based on their best interest:
 * When the sum of the rest of the card values is 10, an ace is counted as 11. 
 * When the sum of the rest of the card values is greater than or equal to 11, an ace is counted as 1.
-7. The player or dealer can hit more than once.
-8. The player can stand after hitting. 
-9. Standing ends the player’s turn.
-10. The deck is shuffled after every round.
-11. If the dealer has a hand total of 17 or higher, they will automatically stand. If the dealer has a hand total of 16 or lower, they will take additional hit cards.
-12. An integration test or end-to-end test is not necessary.
+8. The player or dealer can hit more than once.
+9. The player can stand after hitting. 
+10. Standing ends the player’s turn.
+11. The deck is shuffled after every round.
+12. If the dealer has a hand total of 17 or higher, they will automatically stand. If the dealer has a hand total of 16 or lower, they will take additional hit cards.
+13. An integration test or end-to-end test is not necessary.
 
 ## Known issues and limitations
 
